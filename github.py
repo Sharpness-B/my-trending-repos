@@ -43,7 +43,7 @@ def fetchThenAdd(catalogue, isWithinTimespan, author, page, timespanDays):
     r = requests.get(url, params=params, headers=headers)
     obj = r.json()
 
-    if not "items" in obj: # in case: API rate limit exceeded for [ip address], then try again 3 times with 2 seconds delay in between
+    if not "items" in obj: # in case: API rate limit exceeded for [ip address], then try again up to 3 times, when avaliable requests
         success = False
         for attempt in range(1,4):
             reset = r.headers["X-RateLimit-Reset"]
