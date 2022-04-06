@@ -1,3 +1,5 @@
+import io
+
 import matplotlib.pyplot as plt
 from github import divisor
 
@@ -33,7 +35,13 @@ def plotCommits(catalogue, withinTimespan, setting, author):
     plt.ylabel("Commits")
     
     plt.legend()
-    plt.show()
+    # plt.show()
+
+    b = io.BytesIO()
+    plt.savefig(b, format="png")
+    plt.close()
+
+    return b
         
         
 
