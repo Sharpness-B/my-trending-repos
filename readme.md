@@ -1,4 +1,4 @@
-## Display the activity of you repositories
+## Dynamically display the activity of you repositories
 
 ```html
 <img alt="example image" src="http://host.com/<github username>">
