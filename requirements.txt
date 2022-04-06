@@ -1,3 +1,5 @@
 requests==2.26.0
-matplotlib==3.3.4
+matplotlib==3.2
 python-dotenv==0.20.0
+markdown==3.1.1
+Flask==2.0.3

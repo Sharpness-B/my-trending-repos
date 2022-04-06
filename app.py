@@ -1,7 +1,10 @@
+from library.github   import getCommits
+from library.plotting import plotCommits
+
 from flask import Flask, Response, request
 
-from library.github import getCommits
-from library.plotting import plotCommits
+import markdown
+import markdown.extensions.fenced_code
 
 
 
@@ -11,9 +14,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    # https://dev.to/mrprofessor/rendering-markdown-from-flask-1l41
-    return 'visit /your-github-username for your commit chart'
+    readme_file = open("readme.md", "r")
+    md_template_string = markdown.markdown(
+        readme_file.read(), extensions=["fenced_code"]
+    )
 
+    md_css_string = "<style> pre { background: #f8f8f8; padding: 5px; width: fit-content; border-radius: 5px;} </style>"
+
+    return md_css_string + md_template_string
 
 
 @app.route('/<author>')
