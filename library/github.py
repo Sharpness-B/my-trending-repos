@@ -49,7 +49,8 @@ def fetchThenAdd(catalogue, isWithinTimespan, author, page, timespanDays):
             reset = r.headers["X-RateLimit-Reset"]
             delay = int(reset) - datetime.now().timestamp()
 
-            sleep(delay)
+            if delay > 0:
+                sleep(delay)
 
             r = requests.get(url, params=params)
             obj = r.json()
