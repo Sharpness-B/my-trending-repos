@@ -121,5 +121,5 @@ def getCommits(author, setting, timespanDays):
 if __name__ == '__main__':
     catalogue = getCommits(author="sharpness-b", setting="month", timespanDays=365)
 
-    # for n in catalogue:
-    #     print(n)
+    for n in catalogue:
+        print(n)
