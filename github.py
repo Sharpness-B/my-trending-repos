@@ -13,7 +13,7 @@ def runInParallel(tasks):
         running_task.join()
 
 
-def fetchThenAdd(catalogue, withinTimespan, author, page, timespanDays):    
+def fetchThenAdd(catalogue, isWithinTimespan, author, page, timespanDays):    
     url = "https://api.github.com/search/commits"
 
     params = {
@@ -41,11 +41,11 @@ def fetchThenAdd(catalogue, withinTimespan, author, page, timespanDays):
 
         if not success:
             print(f"after {attempt+1} tries:", obj)
-            withinTimespan.value = False
+            isWithinTimespan.value = False
             return
 
     if not obj["items"]: # in case no results
-        withinTimespan.value = False
+        isWithinTimespan.value = False
         return
 
 
@@ -55,7 +55,7 @@ def fetchThenAdd(catalogue, withinTimespan, author, page, timespanDays):
         lastDatetimeToInclude = datetime.now(commitTime.tzinfo) - timedelta(days=timespanDays)
         
         if commitTime < lastDatetimeToInclude:
-            withinTimespan.value = False
+            isWithinTimespan.value = False
             return
 
         repo = commit["repository"]["name"]
@@ -78,19 +78,19 @@ divisor = {
     "year": 365
 }
 
-def getCommits(author="sharpness-b", setting="month", timespanDays=365):
+def getCommits(author, setting, timespanDays):
     with Manager() as manager:
         
         catalogue = [manager.dict() for n in range( int( timespanDays/divisor[setting] ) )]
         
-        withinTimespan = Value("i", True)
+        isWithinTimespan = Value("i", True)
 
         page = 0
-        while withinTimespan.value:
+        while isWithinTimespan.value:
             tasks = [
-                {"func": fetchThenAdd, "args": (catalogue, withinTimespan, author, page+1, timespanDays,)}, 
-                {"func": fetchThenAdd, "args": (catalogue, withinTimespan, author, page+2, timespanDays,)}, 
-                {"func": fetchThenAdd, "args": (catalogue, withinTimespan, author, page+3, timespanDays,)}
+                {"func": fetchThenAdd, "args": (catalogue, isWithinTimespan, author, page+1, timespanDays,)}, 
+                {"func": fetchThenAdd, "args": (catalogue, isWithinTimespan, author, page+2, timespanDays,)}, 
+                {"func": fetchThenAdd, "args": (catalogue, isWithinTimespan, author, page+3, timespanDays,)}
             ]
 
             runInParallel(tasks)
@@ -101,7 +101,7 @@ def getCommits(author="sharpness-b", setting="month", timespanDays=365):
 
 
 if __name__ == '__main__':
-    catalogue = getCommits()
+    catalogue = getCommits(author="sharpness-b", setting="month", timespanDays=365)
 
     for n in catalogue:
         print(n)

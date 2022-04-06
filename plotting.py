@@ -19,7 +19,7 @@ def formatCatalogue(catalogue):
 
 
 
-def plotCommits(catalogue, withinTimespan, setting, author):
+def plotCommits(catalogue, author, setting, timespanDays):
 
     values = formatCatalogue(catalogue)
     for repo in values:
@@ -28,7 +28,7 @@ def plotCommits(catalogue, withinTimespan, setting, author):
         plt.plot([p[0] for p in points], [p[1] for p in points], label=repo)
     
     # Add labels and title
-    plt.title(f"Commits by {author} last {withinTimespan} days")
+    plt.title(f"Commits by {author} last {timespanDays} days")
     # plt.xlabel("X-axis")
     ax = plt.gca()
     ax.axes.xaxis.set_visible(False)

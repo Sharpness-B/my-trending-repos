@@ -1,4 +1,4 @@
-from flask import Flask, Response
+from flask import Flask, Response, request
 
 from github import getCommits
 from plotting import plotCommits
@@ -18,8 +18,11 @@ def home():
 
 @app.route('/<author>')
 def chart(author):
-    catalogue = getCommits(author)
-    bytes = plotCommits(catalogue, 365, "month", author)
+    timespanDays = int( request.args.get('timespanDays') or 365 )
+    setting      =      request.args.get('setting')      or "month"
+
+    catalogue = getCommits(author, setting, timespanDays)
+    bytes = plotCommits(catalogue, author, setting, timespanDays)
 
     return Response(bytes.getvalue(), mimetype="image/png")
 
