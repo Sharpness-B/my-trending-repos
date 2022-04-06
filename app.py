@@ -1,7 +1,7 @@
 from flask import Flask, Response, request
 
-from github import getCommits
-from plotting import plotCommits
+from library.github import getCommits
+from library.plotting import plotCommits
 
 
 
