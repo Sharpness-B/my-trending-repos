@@ -2,7 +2,13 @@ from multiprocessing import Value, Process, Manager
 import requests
 from datetime import datetime, timedelta
 from time import sleep
-import json
+import base64
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+
 
 def runInParallel(tasks):
     running_tasks = [Process(target=task["func"], args=task["args"]) for task in tasks]
@@ -24,15 +30,29 @@ def fetchThenAdd(catalogue, isWithinTimespan, author, page, timespanDays):
         "page": page
     }
 
-    r = requests.get(url, params=params)
+    authorization = os.environ['github_username'] + ":" + os.environ['github_auth_token']
+
+    authorization_bytes = authorization.encode('ascii')
+    base64_bytes = base64.b64encode(authorization_bytes)
+    base64_authorization = base64_bytes.decode('ascii')
+
+    headers = {
+        "Authorization": "Basic " + base64_authorization
+    }
+
+    r = requests.get(url, params=params, headers=headers)
     obj = r.json()
 
-
+    print(r.headers)
 
     if not "items" in obj: # in case: API rate limit exceeded for [ip address], then try again 3 times with 2 seconds delay in between
         success = False
         for attempt in range(1,4):
-            sleep(2)
+            reset = r.headers["X-RateLimit-Reset"]
+            delay = int(reset) - datetime.now().timestamp()
+
+            sleep(delay)
+
             r = requests.get(url, params=params)
             obj = r.json()
             success = "items" in obj
@@ -103,5 +123,5 @@ def getCommits(author, setting, timespanDays):
 if __name__ == '__main__':
     catalogue = getCommits(author="sharpness-b", setting="month", timespanDays=365)
 
-    for n in catalogue:
-        print(n)
+    # for n in catalogue:
+    #     print(n)
