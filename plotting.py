@@ -1,7 +1,9 @@
 import io
 
+from PIL import Image
+
 import matplotlib.pyplot as plt
-from github import divisor
+import matplotlib.image as mpimg
 
 
 
@@ -35,17 +37,19 @@ def plotCommits(catalogue, author, setting, timespanDays):
     plt.ylabel("Commits")
     
     plt.legend()
-    # plt.show()
 
     b = io.BytesIO()
     plt.savefig(b, format="png")
-    plt.close()
+    b.seek(0)
 
+    if __name__ == '__main__':
+        plt.show()
+
+    plt.close()
     return b
         
         
 
 if __name__ == '__main__':
     catalogue = [ {'Advancer': 5}, {}, {}, {'Advancer': 9}, {}, {'linked-practice': 19, 'sharpness-b': 3}, {'Advancer-2.0': 45}, {}, {}, {'sharpness-b': 17, 'quizzes-practice-app': 13}, {'unknown-source': 52, 'sharpness-b': 4, 'Advancer-2.0': 1, 'Advancer': 1}, {'bjergstedblaseensemble.no': 35, 'quick-git': 13}]
-
-    plotCommits(catalogue, 365, "month", "sharpness-b")
+    plotCommits(catalogue, "sharpness-b", "month", 365)
