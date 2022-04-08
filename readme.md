@@ -17,4 +17,7 @@ Determine how many days the x-axis to group together by applying `setting` with 
 
 ![example image](static/example.png?raw=true)
 
-## How it works
+## Tech stack
+ - Github api
+ - Flask
+ - Multiprocessing
