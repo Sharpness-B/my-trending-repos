@@ -1,7 +1,7 @@
 ## Dynamically display the activity of you repositories
 
 ```html
-<img src="https://host.com/<github username>">
+<img src="https://my-trending-repos.herokuapp.com/<github username>">
 ```
 
 ## Optional url parameters
@@ -12,7 +12,7 @@ Determine how many days the x-axis to group together by applying `setting` with 
 
 
 ```html
-<img src="https://host.com/sharpness-b?timespanDays=365&setting=month">
+<img src="https://my-trending-repos.herokuapp.com/sharpness-b?timespanDays=365&setting=month">
 ```
 
 ![example image](static/example.png?raw=true)
